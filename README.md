@@ -1,2 +1,2 @@
 # ThunPS1
-A PS1 Emulator
+A PS1 Emulator for Windows
