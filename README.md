@@ -1,2 +1,2 @@
-# ThunPS1
+# AttackPS1
 A PS1 Emulator for Windows
