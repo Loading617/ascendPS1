@@ -27,7 +27,7 @@ LANGUAGE 9, 1
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
 
-IDI_THUNPS1       ICON         "ThunPS1.ico"
+IDI_THUNPS1       ICON         "AttackPS1.ico"
 IDI_SMALL               ICON         "small.ico"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ CAPTION "About ThunPS1"
 FONT 8, "MS Shell Dlg"
 BEGIN
     ICON            IDI_THUNPS1,IDC_STATIC,14,14,21,20
-    LTEXT           "ThunPS1, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "AttackPS1, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (c) 2024",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
 END
@@ -130,8 +130,8 @@ END
 
 STRINGTABLE
 BEGIN
-   IDC_THUNPS1   "THUNPS1"
-   IDS_APP_TITLE       "ThunPS1"
+   IDC_ATTACKPS1   "ATTACKPS1"
+   IDS_APP_TITLE       "AttackPS1"
 END
 
 #endif
