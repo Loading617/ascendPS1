@@ -1,1 +1,3 @@
-#include "AttackPS1 PS1 Emulator"
+#pragma once
+
+#include "resource.h"
