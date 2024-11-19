@@ -1,5 +1,5 @@
 <p align="center">
-	<img src="AttackPS1.png" width="300" height="300" alt="AttackPS1">  
+	<img src="AttackPS1.png" width="400" height="400" alt="AttackPS1">  
 </p>
 
 # AttackPS1
