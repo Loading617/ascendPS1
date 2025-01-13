@@ -3,4 +3,4 @@
 </p>
 
 # AttackPS1
-A PS1 Emulator for Windows
+A PS1 Emulator that's Cross-Platform
