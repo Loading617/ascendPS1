@@ -8,7 +8,7 @@ void stopEmulator();
 sf::Texture getVideoFrame();
 
 int main() {
-    sf::RenderWindow window(sf::VideoMode(800, 600), "PS1 Emulator");
+    sf::RenderWindow window(sf::VideoMode(800, 600), "AttackPS1");
     tgui::Gui gui{window};
 
     sf::RectangleShape screen(sf::Vector2f(640, 480));
