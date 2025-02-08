@@ -1,24 +1,22 @@
 #include <TGUI/TGUI.hpp>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
-void loadROM(const std::string& path) {
-    
-    std::cout << "Loaded ROM: " << path << std::endl;
-}
-
-void runEmulator() {
-    
-    std::cout << "Running emulator..." << std::endl;
-}
+void loadROM(const std::string& path);
+void startEmulator();
+void stopEmulator();
+sf::Texture getVideoFrame();
 
 int main() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "AttackPS1");
     tgui::Gui gui{window};
 
-    tgui::Theme theme{"Black.txt"};
+    sf::RectangleShape screen(sf::Vector2f(640, 480));
+    screen.setPosition(80, 20);
+    screen.setFillColor(sf::Color::Black);
 
     auto loadButton = tgui::Button::create("Load ROM");
-    loadButton->setPosition(100, 100);
+    loadButton->setPosition(100, 520);
     loadButton->setSize(200, 50);
     loadButton->onPress([&gui]() {
         auto fileDialog = tgui::FileDialog::create();
@@ -30,17 +28,21 @@ int main() {
     });
     gui.add(loadButton);
 
-    auto runButton = tgui::Button::create("Run");
-    runButton->setPosition(100, 200);
-    runButton->setSize(200, 50);
-    runButton->onPress([]() {
-        runEmulator();
+    auto startButton = tgui::Button::create("Start");
+    startButton->setPosition(320, 520);
+    startButton->setSize(200, 50);
+    startButton->onPress([]() {
+        startEmulator();
     });
-    gui.add(runButton);
+    gui.add(startButton);
 
-    sf::RectangleShape screen(sf::Vector2f(640, 480));
-    screen.setPosition(300, 100);
-    screen.setFillColor(sf::Color::Black);
+    auto stopButton = tgui::Button::create("Stop");
+    stopButton->setPosition(540, 520);
+    stopButton->setSize(200, 50);
+    stopButton->onPress([]() {
+        stopEmulator();
+    });
+    gui.add(stopButton);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -52,7 +54,12 @@ int main() {
         }
 
         window.clear();
-        window.draw(screen);
+
+        sf::Texture videoTexture = getVideoFrame();
+        sf::Sprite videoSprite(videoTexture);
+        videoSprite.setPosition(screen.getPosition());
+        window.draw(videoSprite);
+
         gui.draw();
         window.display();
     }
