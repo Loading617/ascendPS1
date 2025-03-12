@@ -3,7 +3,7 @@
 
 GUI::GUI()
     : m_button_open("Open ROM"), m_button_run("Run Emulator") {
-    set_title("AscendPS1");
+    set_title("ascendPS1");
     set_default_size(400, 200);
 
     m_box.set_orientation(Gtk::ORIENTATION_VERTICAL);
