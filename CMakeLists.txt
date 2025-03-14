@@ -11,5 +11,5 @@ link_directories(${GTKMM_LIBRARY_DIRS})
 
 add_definitions(${GTKMM_CFLAGS_OTHER})
 
-add_executable(ps1_emulator src/main.cpp src/emulator.cpp src/gui.cpp)
-target_link_libraries(ps1_emulator ${GTKMM_LIBRARIES})
+add_executable(ascendPS1 src/main.cpp src/emulator.cpp src/gui.cpp)
+target_link_libraries(ascendPS1 ${GTKMM_LIBRARIES})
