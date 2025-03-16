@@ -17,7 +17,7 @@ public:
 };
 
 int main() {
-    PS1Emulator emulator;
+    ascendPS1 emulator;
     emulator.loadGame("path/to/your/game.iso");
     emulator.emulate();
     emulator.handleInput();
