@@ -2,6 +2,7 @@
 #include "memory.hpp"
 #include "cdrom.hpp"
 #include "controller.hpp"
+#include <gtkmm.h>
 #include <iostream>
 
 int main() {
