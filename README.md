@@ -3,4 +3,4 @@
 </p>
 
 # ascendPS1
-A PS1 Emulator that's Cross-Platform
+New PS1 Emulator
