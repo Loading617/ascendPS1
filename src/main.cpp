@@ -2,7 +2,8 @@
 #include "memory.hpp"
 #include "cdrom.hpp"
 #include "controller.hpp"
-#include <gtkmm.h>
+#include "utils.hpp"
+#include <vector>
 #include <iostream>
 
 int main() {
@@ -12,7 +13,7 @@ int main() {
     Controller controller;
 
     std::vector<uint8_t> bios = load_file("scph1001.bin");
-    if (!bios.empty()) {
+if (!bios.empty()) {
         memory.load_bios(bios);
     } else {
         std::cerr << "Failed to load BIOS!" << std::endl;
