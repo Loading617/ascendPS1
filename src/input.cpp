@@ -1,10 +1,11 @@
 #include "input.hpp"
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <fstream>
 
 Input::Input() 
     : buttonState(0xFFFF), analogLX(0), analogLY(0), analogRX(0), analogRY(0),
-      controller(nullptr), haptic(nullptr) {
+      analogSensitivity(1.0f), controller(nullptr), haptic(nullptr) {
     
     if (SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0) {
         std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
@@ -26,9 +27,11 @@ Input::Input()
         }
     }
     initKeyMap();
+    loadKeyMappings("keymap.cfg");
 }
 
 Input::~Input() {
+    saveKeyMappings("keymap.cfg");
     if (haptic) SDL_HapticClose(haptic);
     if (controller) SDL_GameControllerClose(controller);
     SDL_Quit();
@@ -53,6 +56,38 @@ void Input::initKeyMap() {
 
 void Input::configureKey(SDL_Keycode key, uint16_t psButton) {
     keyMap[key] = psButton;
+}
+
+void Input::saveKeyMappings(const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file) {
+        std::cerr << "Failed to save key mappings!" << std::endl;
+        return;
+    }
+
+    for (const auto& pair : keyMap) {
+        file << pair.first << " " << pair.second << "\n";
+    }
+
+    file.close();
+}
+
+void Input::loadKeyMappings(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file) {
+        std::cerr << "No existing key mappings found, using defaults." << std::endl;
+        return;
+    }
+
+    keyMap.clear();
+    SDL_Keycode key;
+    uint16_t psButton;
+    
+    while (file >> key >> psButton) {
+        keyMap[key] = psButton;
+    }
+
+    file.close();
 }
 
 void Input::handleKeyboard() {
@@ -84,10 +119,10 @@ void Input::handleGamepad() {
     if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) buttonState &= ~0x0400;
     if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) buttonState &= ~0x0800;
 
-    analogLX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
-    analogLY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
-    analogRX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
-    analogRY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
+    analogLX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) * analogSensitivity;
+    analogLY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) * analogSensitivity;
+    analogRX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) * analogSensitivity;
+    analogRY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) * analogSensitivity;
 }
 
 void Input::update() {
@@ -96,21 +131,6 @@ void Input::update() {
     handleGamepad();
 }
 
-int16_t Input::getAnalogLX() const { return analogLX; }
-int16_t Input::getAnalogLY() const { return analogLY; }
-int16_t Input::getAnalogRX() const { return analogRX; }
-int16_t Input::getAnalogRY() const { return analogRY; }
-
-uint16_t Input::getButtonState() const {
-    return buttonState;
-}
-
-void Input::setButtonState(uint16_t state) {
-    buttonState = state;
-}
-
-void Input::setVibration(float strength, uint32_t duration) {
-    if (haptic && SDL_HapticRumbleSupported(haptic)) {
-        SDL_HapticRumblePlay(haptic, strength, duration);
-    }
+void Input::setAnalogSensitivity(float sensitivity) {
+    analogSensitivity = sensitivity;
 }
