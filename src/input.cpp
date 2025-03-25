@@ -2,13 +2,25 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 
-Input::Input() : buttonState(0xFFFF), controller(nullptr) {
-    if (SDL_Init(SDL_INIT_GAMECONTROLLER) < 0) {
-        std::cerr << "Failed to initialize SDL GameController: " << SDL_GetError() << std::endl;
+Input::Input() 
+    : buttonState(0xFFFF), analogLX(0), analogLY(0), analogRX(0), analogRY(0),
+      controller(nullptr), haptic(nullptr) {
+    
+    if (SDL_Init(SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC) < 0) {
+        std::cerr << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
     } else {
         if (SDL_NumJoysticks() > 0) {
             controller = SDL_GameControllerOpen(0);
-            if (!controller) {
+            if (controller) {
+                if (SDL_GameControllerHasRumble(controller)) {
+                    haptic = SDL_HapticOpenFromJoystick(SDL_GameControllerGetJoystick(controller));
+                    if (haptic && SDL_HapticRumbleInit(haptic) < 0) {
+                        std::cerr << "Haptic not supported: " << SDL_GetError() << std::endl;
+                        SDL_HapticClose(haptic);
+                        haptic = nullptr;
+                    }
+                }
+            } else {
                 std::cerr << "Could not open game controller: " << SDL_GetError() << std::endl;
             }
         }
@@ -17,9 +29,8 @@ Input::Input() : buttonState(0xFFFF), controller(nullptr) {
 }
 
 Input::~Input() {
-    if (controller) {
-        SDL_GameControllerClose(controller);
-    }
+    if (haptic) SDL_HapticClose(haptic);
+    if (controller) SDL_GameControllerClose(controller);
     SDL_Quit();
 }
 
@@ -38,6 +49,10 @@ void Input::initKeyMap() {
     keyMap[SDLK_e] = 0x0800;
     keyMap[SDLK_z] = 0x1000;
     keyMap[SDLK_c] = 0x2000;
+}
+
+void Input::configureKey(SDL_Keycode key, uint16_t psButton) {
+    keyMap[key] = psButton;
 }
 
 void Input::handleKeyboard() {
@@ -68,6 +83,11 @@ void Input::handleGamepad() {
     if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_B)) buttonState &= ~0x0200;
     if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) buttonState &= ~0x0400;
     if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) buttonState &= ~0x0800;
+
+    analogLX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX);
+    analogLY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY);
+    analogRX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX);
+    analogRY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY);
 }
 
 void Input::update() {
@@ -76,10 +96,21 @@ void Input::update() {
     handleGamepad();
 }
 
+int16_t Input::getAnalogLX() const { return analogLX; }
+int16_t Input::getAnalogLY() const { return analogLY; }
+int16_t Input::getAnalogRX() const { return analogRX; }
+int16_t Input::getAnalogRY() const { return analogRY; }
+
 uint16_t Input::getButtonState() const {
     return buttonState;
 }
 
 void Input::setButtonState(uint16_t state) {
     buttonState = state;
+}
+
+void Input::setVibration(float strength, uint32_t duration) {
+    if (haptic && SDL_HapticRumbleSupported(haptic)) {
+        SDL_HapticRumblePlay(haptic, strength, duration);
+    }
 }
