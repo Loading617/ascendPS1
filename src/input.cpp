@@ -1,9 +1,8 @@
 #include "input.hpp"
-#include <SDL2/SDL.h>
-#include <iostream>
+#include <gtkmm.h>
 #include <fstream>
+#include <iostream>
 #include <filesystem>
-#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -58,24 +57,6 @@ void Input::initKeyMap() {
     keyMap[SDLK_c] = 0x2000;
 }
 
-void Input::saveProfile(const std::string& profileName) {
-    saveKeyMappings("profiles/" + profileName + ".cfg");
-}
-
-void Input::loadProfile(const std::string& profileName) {
-    loadKeyMappings("profiles/" + profileName + ".cfg");
-}
-
-std::vector<std::string> Input::getAvailableProfiles() {
-    std::vector<std::string> profiles;
-    for (const auto& entry : fs::directory_iterator("profiles")) {
-        if (entry.path().extension() == ".cfg") {
-            profiles.push_back(entry.path().stem().string());
-        }
-    }
-    return profiles;
-}
-
 void Input::saveKeyMappings(const std::string& filename) {
     std::ofstream file(filename);
     if (!file) {
@@ -106,50 +87,38 @@ void Input::loadKeyMappings(const std::string& filename) {
 }
 
 void Input::openRemapUI() {
-    std::cout << "---- Key Remapping ----" << std::endl;
-    std::cout << "Press the key for each button when prompted.\n";
+    auto app = Gtk::Application::create();
+    Gtk::Window window;
+    window.set_title("Key Remapping");
+    window.set_default_size(300, 400);
+
+    Gtk::Box vbox(Gtk::ORIENTATION_VERTICAL, 10);
+    window.add(vbox);
 
     for (auto& pair : keyMap) {
-        std::cout << "Press a key for " << pair.second << ": ";
-        SDL_Event event;
-        while (true) {
-            SDL_PollEvent(&event);
-            if (event.type == SDL_KEYDOWN) {
-                keyMap[event.key.keysym.sym] = pair.second;
-                break;
+        Gtk::Button* button = Gtk::manage(new Gtk::Button("Press a key..."));
+        vbox.pack_start(*button);
+
+        button->signal_clicked().connect([this, button, &pair]() {
+            SDL_Event event;
+            button->set_label("Waiting for input...");
+            while (true) {
+                SDL_PollEvent(&event);
+                if (event.type == SDL_KEYDOWN) {
+                    keyMap[event.key.keysym.sym] = pair.second;
+                    button->set_label(SDL_GetKeyName(event.key.keysym.sym));
+                    break;
+                }
             }
-        }
+        });
     }
 
-    std::cout << "Remapping completed. Saving to 'profiles/custom.cfg'..." << std::endl;
-    saveProfile("custom");
-}
+    Gtk::Button saveButton("Save Profile");
+    saveButton.signal_clicked().connect([this]() {
+        saveProfile("custom");
+    });
 
-void Input::handleKeyboard() {
-    const Uint8* state = SDL_GetKeyboardState(nullptr);
-    buttonState = 0xFFFF;
-
-    for (const auto& pair : keyMap) {
-        if (state[SDL_GetScancodeFromKey(pair.first)]) {
-            buttonState &= ~pair.second;
-        }
-    }
-}
-
-void Input::handleGamepad() {
-    if (!controller) return;
-
-    buttonState = 0xFFFF;
-
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_UP)) buttonState &= ~0x0001;
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN)) buttonState &= ~0x0002;
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT)) buttonState &= ~0x0004;
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) buttonState &= ~0x0008;
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_START)) buttonState &= ~0x0010;
-    if (SDL_GameControllerGetButton(controller, SDL_CONTROLLER_BUTTON_BACK)) buttonState &= ~0x0020;
-
-    analogLX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTX) * analogSensitivity;
-    analogLY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_LEFTY) * analogSensitivity;
-    analogRX = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTX) * analogSensitivity;
-    analogRY = SDL_GameControllerGetAxis(controller, SDL_CONTROLLER_AXIS_RIGHTY) * analogSensitivity;
+    vbox.pack_start(saveButton);
+    window.show_all_children();
+    app->run(window);
 }
