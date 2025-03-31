@@ -1,12 +1,13 @@
 #include "gui.hpp"
 #include <gtkmm/filechooserdialog.h>
+#include <gtkmm/box.h>
 #include <iostream>
 
 GUI::GUI() : open_rom_button("Open ROM") {
     set_title("ascendPS1");
     set_default_size(600, 400);
 
-    main_box.set_orientation(Gtk::ORIENTATION::VERTICAL);
+    main_box.set_orientation(Gtk::Orientation::VERTICAL);
     add(main_box);
 
     open_rom_button.signal_clicked().connect(sigc::mem_fun(*this, &GUI::on_open_rom));
