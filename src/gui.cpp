@@ -5,13 +5,13 @@ GUI::GUI() : open_rom_button("Open ROM") {
     set_title("ascendPS1");
     set_default_size(600, 400);
 
-    main_box.set_orientation(Gtk::Orientation::VERTICAL);
-    set_child(main_box);
+    main_box.set_orientation(Gtk::ORIENTATION::VERTICAL);
+    add(main_box);
 
     open_rom_button.signal_clicked().connect(sigc::mem_fun(*this, &GUI::on_open_rom));
     
-    main_box.append(open_rom_button);
-    main_box.append(status_label);
+    main_box.pack_start(open_rom_button, Gtk::PACK_SHRINK);
+    main_box.pack_start(status_label, Gtk::PACK_SHRINK);
 }
 
 GUI::~GUI() {}
