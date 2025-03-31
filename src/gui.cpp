@@ -19,9 +19,9 @@ GUI::GUI() : open_rom_button("Open ROM") {
 GUI::~GUI() {}
 
 void GUI::on_open_rom() {
-    Gtk::FileChooserDialog dialog(*this, "Open PS1 ROM", Gtk::FileChooser::Action::OPEN);
+    Gtk::FileChooserDialog dialog(*this, "Open PS1 ROM", Gtk::FileChooserAction::OPEN);
     dialog.add_button("_Cancel", Gtk::ResponseType::CANCEL);
-    dialog.add_button("_Open", Gtk::ResponseType::OK);
+    dialog.add_button("_Open", Gtk::ResponseType::ACCEPT);
 
     if (dialog.run() == Gtk::ResponseType::OK) {
         std::string filename = dialog.get_file()->get_path();
