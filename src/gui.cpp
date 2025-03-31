@@ -1,7 +1,5 @@
 #include "gui.hpp"
-#include <gtkmm/orientation.h>
 #include <gtkmm/filechooserdialog.h>
-#include <gtkmm/responsetype.h>
 #include <iostream>
 
 GUI::GUI() : open_rom_button("Open ROM") {
