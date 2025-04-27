@@ -40,7 +40,6 @@ void PS1EmulatorWindow::on_menu_open_iso() {
 
     if (dialog.run() == Gtk::RESPONSE_OK) {
         std::cout << "Selected ISO: " << dialog.get_filename() << std::endl;
-        // TODO: load ISO into emulator
     }
 }
 
