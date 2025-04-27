@@ -1,7 +1,7 @@
 #include "main_window.hpp"
 #include <iostream>
 
-PS1EmulatorWindow::PS1EmulatorWindow() : vbox(Gtk::ORIENTATION_VERTICAL) {
+ascendPS1Window::ascendPS1Window() : vbox(Gtk::ORIENTATION_VERTICAL) {
     set_title("ascendPS1");
     set_default_size(960, 720);
 
