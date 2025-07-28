@@ -1,7 +1,7 @@
 #include <CtrlLib/CtrlLib.h>
 using namespace Upp;
 
-struct MyAppWindow : TopWindow {
+struct ascendPS1 : TopWindow {
     MenuBar menu;
 
     void FileMenu(Bar& bar) {
@@ -93,7 +93,7 @@ struct MyAppWindow : TopWindow {
         bar.Sub("Help", [=](Bar& bar) { HelpMenu(bar); });
     }
 
-    MyAppWindow() {
+    ascendPS1() {
         Title("ascendPS1").Sizeable().MinimizeBox().MaximizeBox();
         AddFrame(menu);
         menu.Set([=](Bar& bar) { MainMenu(bar); });
@@ -102,6 +102,6 @@ struct MyAppWindow : TopWindow {
 
 GUI_APP_MAIN
 {
-    MyAppWindow app;
+    ascendPS1 app;
     app.Run();
 }
