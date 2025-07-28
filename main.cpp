@@ -5,79 +5,79 @@ struct MyAppWindow : TopWindow {
     MenuBar menu;
 
     void FileMenu(Bar& bar) {
-        bar.Add("Load ISO / BIN / CUE", [] {});
-        bar.Add("Load from CD-ROM", [] {});
-        bar.Add("Recently Played", [] {});
-        bar.Add("Save State", [] {});
-        bar.Add("Load State", [] {});
+        bar.Add("Load ISO / BIN / CUE", [=] { PromptOK(""); });
+        bar.Add("Load from CD-ROM", [=] { PromptOK(""); });
+        bar.Add("Recently Played", [=] { PromptOK(""); });
+        bar.Add("Save State", [=] { PromptOK(""); });
+        bar.Add("Load State", [=] { PromptOK(""); });
         bar.Add("Exit", [=] { Exit(); });
     }
 
     void SystemMenu(Bar& bar) {
-        bar.Add("Reset", [] {});
-        bar.Add("Pause / Resume", [] {});
-        bar.Add("Soft Reset", [] {});
-        bar.Add("Hard Reset", [] {});
-        bar.Add("Power Off (for realism vibes)", [] {});
+        bar.Add("Reset", [=] { PromptOK(""); });
+        bar.Add("Pause / Resume", [=] { PromptOK(""); });
+        bar.Add("Soft Reset", [=] { PromptOK(""); });
+        bar.Add("Hard Reset", [=] { PromptOK(""); });
+        bar.Add("Power Off (for realism vibes)", [=] { PromptOK(""); });
     }
 
     void PreferencesMenu(Bar& bar) {
-        bar.Add("BIOS", [] {});
-        bar.Add("Region", [] {});
-        bar.Add("Language", [] {});
-        bar.Add("Save Path Config", [] {});
-        bar.Add("Screenshot Folder", [] {});
+        bar.Add("BIOS", [=] { PromptOK(""); });
+        bar.Add("Region", [=] { PromptOK(""); });
+        bar.Add("Language", [=] { PromptOK(""); });
+        bar.Add("Save Path Config", [=] { PromptOK(""); });
+        bar.Add("Screenshot Folder", [=] { PromptOK(""); });
     }
 
     void VideoMenu(Bar& bar) {
-        bar.Add("Resolution", [] {});
-        bar.Add("Aspect Ratio", [] {});
-        bar.Add("VSync On/Off", [] {});
-        bar.Add("Filters", [] {});
-        bar.Add("Renderer", [] {});
+        bar.Add("Resolution", [=] { PromptOK(""); });
+        bar.Add("Aspect Ratio", [=] { PromptOK(""); });
+        bar.Add("VSync On/Off", [=] { PromptOK(""); });
+        bar.Add("Filters", [=] { PromptOK(""); });
+        bar.Add("Renderer", [=] { PromptOK(""); });
     }
 
     void AudioMenu(Bar& bar) {
-        bar.Add("Volume Control", [] {});
-        bar.Add("Output Backend", [] {});
-        bar.Add("Enable Reverb / Interpolation", [] {});
-        bar.Add("Audio Latency", [] {});
+        bar.Add("Volume Control", [=] {  PromptOK(""); });
+        bar.Add("Output Backend", [=] { PromptOK(""); });
+        bar.Add("Enable Reverb / Interpolation", [=] { PromptOK(""); });
+        bar.Add("Audio Latency", [=] { PromptOK(""); });
     }
 
     void ControlsMenu(Bar& bar) {
-        bar.Add("Input Mapping", [] {});
-        bar.Add("Enable Analog Mode", [] {});
-        bar.Add("Rumble Support", [] {});
-        bar.Add("Auto Fire Settings", [] {});
+        bar.Add("Input Mapping", [=] { PromptOK(""); });
+        bar.Add("Enable Analog Mode", [=] { PromptOK(""); });
+        bar.Add("Rumble Support", [=] { PromptOK(""); });
+        bar.Add("Auto Fire Settings", [=] { PromptOK(""); });
     }
 
     void MemoryCardMenu(Bar& bar) {
-        bar.Add("Manage Cards", [] {});
-        bar.Add("Import/Export Save File", [] {});
-        bar.Add("Backup All Saves", [] {});
+        bar.Add("Manage Cards", [=] { PromptOK(""); });
+        bar.Add("Import/Export Save File", [=] { PromptOK(""); });
+        bar.Add("Backup All Saves", [=] { PromptOK(""); });
     }
 
     void CheatsMenu(Bar& bar) {
-        bar.Add("Load Cheat File (.cht/.ini)", [] {});
-        bar.Add("Enable/Disable Cheats", [] {});
-        bar.Add("Add New Cheat (Manual Entry)", [] {});
-        bar.Add("Search Memory (basic GameShark-like)", [] {});
+        bar.Add("Load Cheat File (.cht/.ini)", [=] { PromptOK(""); });
+        bar.Add("Enable/Disable Cheats", [=] { PromptOK(""); });
+        bar.Add("Add New Cheat (Manual Entry)", [=] { PromptOK(""); });
+        bar.Add("Search Memory (basic GameShark-like)", [=] { PromptOK(""); });
     }
 
     void ToolsMenu(Bar& bar) {
-        bar.Add("Debugger", [] {});
-        bar.Add("Disassembler", [] {});
-        bar.Add("Frame Advance", [] {});
-        bar.Add("Log Viewer", [] {});
-        bar.Add("Dump VRAM / SPU / GPU", [] {});
+        bar.Add("Debugger", [=] { PromptOK(""); });
+        bar.Add("Disassembler", [=] { PromptOK(""); });
+        bar.Add("Frame Advance", [=] { PromptOK(""); });
+        bar.Add("Log Viewer", [=] { PromptOK(""); });
+        bar.Add("Dump VRAM / SPU / GPU", [=] { PromptOK(""); });
     }
 
     void HelpMenu(Bar& bar) {
-        bar.Add("About ascendPS1", [] {});
-        bar.Add("Check for Updates", [] {});
-        bar.Add("View Log Files", [] {});
-        bar.Add("Documentation / FAQ", [] {});
-        bar.Add("Report Bug", [] {});
+        bar.Add("About ascendPS1", [=] { PromptOK(""); });
+        bar.Add("Check for Updates", [=] { PromptOK(""); });
+        bar.Add("View Log Files", [=] { PromptOK(""); });
+        bar.Add("Documentation / FAQ", [=] { PromptOK(""); });
+        bar.Add("Report Bug", [=] { PromptOK(""); });
     }
 
     void MainMenu(Bar& bar) {
